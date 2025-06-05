@@ -38,37 +38,7 @@ const AuthForm: React.FC = () => {
     }
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (password !== confirmPassword) {
-      toast({
-        title: "Password mismatch",
-        description: "Passwords do not match. Please try again.",
-        variant: "destructive",
-      });
-      return;
-    }
 
-    setIsLoading(true);
-    
-    try {
-      await register(email, password);
-      toast({
-        title: "Registration successful",
-        description: "Account created successfully!",
-      });
-      navigate('/products');
-    } catch (error) {
-      toast({
-        title: "Registration failed",
-        description: "An error occurred during registration.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">

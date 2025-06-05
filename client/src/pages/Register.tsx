@@ -43,11 +43,7 @@ const Register: React.FC = () => {
       const result = await register(email, password);
       
       if (result.needsConfirmation) {
-        toast({
-          title: "Check your email",
-          description: "We've sent you a confirmation link. Please check your email and click the link to verify your account before logging in.",
-        });
-        navigate('/login');
+        navigate('/email-confirmation');
       } else {
         toast({
           title: "Registration successful",

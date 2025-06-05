@@ -48,6 +48,9 @@ const AuthForm: React.FC = () => {
           <CardDescription className="text-gray-600">
             Sign in to your account
           </CardDescription>
+          <div className="bg-blue-50 p-3 rounded-lg text-sm text-blue-800">
+            <strong>Note:</strong> If you just registered, please check your email and click the confirmation link before logging in.
+          </div>
         </CardHeader>
         <CardContent className="space-y-6">
           <form onSubmit={handleLogin} className="space-y-4">

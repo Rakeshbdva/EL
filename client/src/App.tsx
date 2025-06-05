@@ -8,6 +8,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import AdminDashboard from "./pages/AdminDashboard";
 import AuthForm from "./pages/AuthForm";
 import Register from "./pages/Register";
+import EmailConfirmation from "./pages/EmailConfirmation";
 import ProductList from "./pages/ProductList";
 import ProductForm from "./pages/ProductForm";
 import ProductDetails from "./pages/ProductDetails";
@@ -57,6 +58,14 @@ const AppRoutes = () => {
         element={
           <PublicRoute>
             <Register />
+          </PublicRoute>
+        } 
+      />
+      <Route 
+        path="/email-confirmation" 
+        element={
+          <PublicRoute>
+            <EmailConfirmation />
           </PublicRoute>
         } 
       />

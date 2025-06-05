@@ -1,27 +1,37 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Skeleton } from '@/components/ui/skeleton';
 import Navigation from '../components/Navigation';
 import ProductPreviewDialog from '../components/ProductPreviewDialog';
-import { mockProducts, Product } from '../data/mockData';
+import { apiRequest, queryClient } from '../lib/queryClient';
+import type { Product } from '@shared/schema';
 import { Plus, Search, Download, Upload, MoreHorizontal, Eye, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const ProductList: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>(mockProducts);
   const [searchTerm, setSearchTerm] = useState('');
   const [previewProduct, setPreviewProduct] = useState<Product | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.sku.toLowerCase().includes(searchTerm.toLowerCase())
+  // Fetch products from API
+  const { data: productsData, isLoading, error } = useQuery({
+    queryKey: ['/api/products'],
+    queryFn: () => apiRequest('/api/products'),
+  });
+
+  const products = productsData?.products || [];
+
+  const filteredProducts = products.filter((product: Product) =>
+    product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.sku?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleEdit = (id: string) => {

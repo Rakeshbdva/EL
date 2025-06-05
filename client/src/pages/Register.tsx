@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -8,35 +7,14 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 
-const AuthForm: React.FC = () => {
+const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    
-    try {
-      await login(email, password);
-      toast({
-        title: "Login successful",
-        description: "Welcome back!",
-      });
-      navigate('/products');
-    } catch (error) {
-      toast({
-        title: "Login failed",
-        description: "Please check your credentials and try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,19 +28,28 @@ const AuthForm: React.FC = () => {
       return;
     }
 
+    if (password.length < 6) {
+      toast({
+        title: "Password too short",
+        description: "Password must be at least 6 characters long.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     
     try {
       await register(email, password);
       toast({
         title: "Registration successful",
-        description: "Account created successfully!",
+        description: "Account created successfully! Welcome to the platform.",
       });
       navigate('/products');
     } catch (error) {
       toast({
         title: "Registration failed",
-        description: "An error occurred during registration.",
+        description: "An error occurred during registration. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -74,21 +61,21 @@ const AuthForm: React.FC = () => {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-md border-0 shadow-lg">
         <CardHeader className="space-y-1 pb-6">
-          <CardTitle className="text-2xl font-semibold text-gray-900">Login</CardTitle>
+          <CardTitle className="text-2xl font-semibold text-gray-900">Create Account</CardTitle>
           <CardDescription className="text-gray-600">
-            Sign in to your account
+            Sign up to get started with your account
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleRegister} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                Email
+                Email Address
               </Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="a90685766@gmail.com"
+                placeholder="your.email@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="h-12 bg-gray-100 border-0 text-gray-900 placeholder:text-gray-500"
@@ -107,6 +94,25 @@ const AuthForm: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="h-12 bg-gray-100 border-0 text-gray-900"
+                minLength={6}
+                required
+              />
+              <p className="text-xs text-gray-500">
+                Password must be at least 6 characters long
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
+                Confirm Password
+              </Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="h-12 bg-gray-100 border-0 text-gray-900"
                 required
               />
             </div>
@@ -116,18 +122,18 @@ const AuthForm: React.FC = () => {
               className="w-full h-12 bg-gray-900 hover:bg-gray-800 text-white font-medium mt-6"
               disabled={isLoading}
             >
-              {isLoading ? 'Signing in...' : 'Login'}
+              {isLoading ? 'Creating account...' : 'Create Account'}
             </Button>
           </form>
           
           <div className="text-center">
             <span className="text-sm text-gray-600">
-              Don't have an account?{' '}
+              Already have an account?{' '}
               <Link 
-                to="/register"
+                to="/login"
                 className="text-blue-600 hover:text-blue-700 font-medium"
               >
-                Create account
+                Sign in
               </Link>
             </span>
           </div>
@@ -137,4 +143,4 @@ const AuthForm: React.FC = () => {
   );
 };
 
-export default AuthForm;
+export default Register;

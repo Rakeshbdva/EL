@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import AdminDashboard from "./pages/AdminDashboard";
 import AuthForm from "./pages/AuthForm";
+import Register from "./pages/Register";
 import ProductList from "./pages/ProductList";
 import ProductForm from "./pages/ProductForm";
 import ProductDetails from "./pages/ProductDetails";
@@ -38,6 +39,14 @@ const AppRoutes = () => {
         element={
           <PublicRoute>
             <AuthForm />
+          </PublicRoute>
+        } 
+      />
+      <Route 
+        path="/register" 
+        element={
+          <PublicRoute>
+            <Register />
           </PublicRoute>
         } 
       />

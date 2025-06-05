@@ -40,16 +40,25 @@ const Register: React.FC = () => {
     setIsLoading(true);
     
     try {
-      await register(email, password);
-      toast({
-        title: "Registration successful",
-        description: "Account created successfully! Welcome to the platform.",
-      });
-      navigate('/products');
+      const result = await register(email, password);
+      
+      if (result.needsConfirmation) {
+        toast({
+          title: "Check your email",
+          description: "We've sent you a confirmation link. Please check your email and click the link to verify your account before logging in.",
+        });
+        navigate('/login');
+      } else {
+        toast({
+          title: "Registration successful",
+          description: "Account created successfully! Welcome to the platform.",
+        });
+        navigate('/products');
+      }
     } catch (error) {
       toast({
         title: "Registration failed",
-        description: "An error occurred during registration. Please try again.",
+        description: error instanceof Error ? error.message : "An error occurred during registration. Please try again.",
         variant: "destructive",
       });
     } finally {
